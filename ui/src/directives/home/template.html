@@ -1,0 +1,20 @@
+<div class="bus-status-home">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Stop</th>
+            <th>Bus</th>
+            <th>Time</th>
+            <th>From Now</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat = "bus in busses">
+                <td>{{bus.stopName}} ({{bus.stop}})</td>
+                <td>{{bus.routeName}} ({{bus.bus}})</td>
+                <td>{{bus.time | date: 'short'}}</td>
+                <td>{{printTimeElapsed(bus.timeFromNow/1000)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
