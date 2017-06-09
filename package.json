@@ -9,6 +9,7 @@
     "express": "^4.15.3",
     "http-errors": "^1.6.1",
     "request": "^2.81.0",
+    "mongodb": "^2.2.27",
     "fast-csv": "2.3.0"
   },
   "devDependencies": {

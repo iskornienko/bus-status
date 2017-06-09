@@ -11,6 +11,6 @@ angular.module('bus-status',[zenHome])
             $scope.hai = 'bai';
         }
     ])
-    .config(function($locationProvider) {
+    .config(['$locationProvider',function($locationProvider) {
         $locationProvider.html5Mode(true);
-    });
+    }]);
