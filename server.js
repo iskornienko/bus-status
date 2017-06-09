@@ -82,6 +82,34 @@ function getBusStatus() {
 
 getBusStatus();
 
+
+
+app.get('/export', (request, response) => {
+    MongoClient.connect(url, (function (err, db) {
+        if (err) throw err;
+        db.collection('bus_updates').find().limit(10000).toArray(function (err, result) {
+            db.close();
+
+
+            var b = '';
+            result.forEach(function (a) {
+                b += a.time+","+
+                a.topUpdate.arrival.time*1000+","+
+                a.topUpdate.stop_id+","+
+                a.trip.route_id+","+
+                a.trip.trip_id + '$$$';
+            })
+
+
+            console.log(b);
+
+
+            response.send(b);
+        })
+    }))
+})
+
+
 app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
     MongoClient.connect(url, (function (err, db) {
         if (err) throw err;
