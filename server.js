@@ -50,6 +50,17 @@ function getBusStatus() {
                                     if (requestedStops.indexOf(stopUpdate.stop_id) != -1
                                         && requestedBusses.indexOf(trip.trip.route_id) != -1) {
 
+                                        var currentDate = (new Date()).getTime();
+
+                                        var today = new Date();
+                                        today.setHours(0);
+                                        today.setMinutes(0);
+                                        today.setSeconds(0);
+                                        today.setMilliseconds(0);
+
+                                        var millisecondsInDay = currentDate - today.getTime();
+
+
                                         MongoClient.connect(url, (function (err, db) {
                                             if (err) throw err;
                                             db.collection('bus_updates').insertOne(this.data);
@@ -58,9 +69,12 @@ function getBusStatus() {
                                             {
                                                 data:
                                                 {
-                                                    time: (new Date).getTime(),
+                                                    time: currentDate/1000,
+                                                    secSinceDayStart: millisecondsInDay/1000,
+                                                    dayOfWeek: (new Date()).getDay(),
+                                                    timeToBusArrival: stopUpdate.arrival.time - currentDate/1000,
                                                     vehicle: trip.vehicle,
-                                                    topUpdate: stopUpdate,
+                                                    stopUpdate: stopUpdate,
                                                     trip: trip.trip,
                                                     routeName: busses[trip.trip.route_id][3],
                                                     stopName: stops[stopUpdate.stop_id][2]
@@ -83,7 +97,7 @@ function getBusStatus() {
 getBusStatus();
 
 
-
+/*
 app.get('/export', (request, response) => {
     MongoClient.connect(url, (function (err, db) {
         if (err) throw err;
@@ -108,6 +122,49 @@ app.get('/export', (request, response) => {
         })
     }))
 })
+*/
+
+/*
+app.get('/export123', (request, response) => {
+    MongoClient.connect(url, (function (err, db) {
+        if (err) throw err;
+
+        db.collection('bus_updates').mapReduce(
+            function () {emit(this.trip.trip_id,
+                {time: this.timeToBusArrival,
+                    arrival: this.secSinceDayStart/60/60});},
+            function (key, values) {
+                var minId = 23;
+                var min = 100000000000;
+
+                values.forEach(function (a) {
+                    if(a.time < min) {
+                        minId = a.arrival;
+                        min = a.time;
+                    }
+                })
+
+                return {
+                    arrivalTime: minId,
+                    estimateOff: min/60
+                };
+            },
+            {
+                query: {},
+                out: 'totals'
+            },
+            function (err,result) {
+
+            db.collection('totals').find(
+                {}
+            ).toArray(function(err,result) {
+                db.close();
+                response.send(result);
+        })
+    })
+}))
+})
+*/
 
 
 app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
@@ -116,7 +173,7 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
         db.collection('bus_updates').find(
             {
                 $and: [
-                    { 'topUpdate.stop_id' :  '2613'},
+                    { 'stopUpdate.stop_id' :  '2613'},
                     { 'trip.route_id' :  '19'}
                 ]
             }
@@ -124,7 +181,7 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
             db.collection('bus_updates').find(
                 {
                     $and: [
-                        { 'topUpdate.stop_id' :  '1921'},
+                        { 'stopUpdate.stop_id' :  '1921'},
                         { 'trip.route_id' :  '19'}
                     ]
                 }
@@ -132,9 +189,10 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
 
                 db.close();
 
+                console.log(request.params.stopIds)
 
-                var requestedStops = request.params.stopIds.split(',');
-                var requestedBusses = request.params.busIds.split(',');
+                var requestedStops = request.params.stopIds != 'undefined' ? request.params.stopIds.split(',') : ['2613','1921'];
+                var requestedBusses = request.params.busIds != 'undefined' ? request.params.busIds.split(',') : ['19'];
 
                 var data = [];
 
@@ -149,10 +207,10 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                 response.send({data: data.map(function (a) {
                     return {
                         trip_id: a.trip.trip_id,
-                        stop: a.topUpdate.stop_id,
+                        stop: a.stopUpdate.stop_id,
                         bus: a.trip.route_id,
-                        time: a.topUpdate.arrival.time*1000,
-                        timeFromNow: (a.topUpdate.arrival.time*1000 - (new Date()).getTime()),
+                        time: a.stopUpdate.arrival.time*1000,
+                        timeFromNow: (a.stopUpdate.arrival.time*1000 - (new Date()).getTime()),
                         routeName: a.routeName,
                         stopName: a.stopName
                     };
