@@ -175,7 +175,7 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                 $and: [
                     { 'stopUpdate.stop_id' :  '2613'},
                     { 'trip.route_id' :  '19'},
-                    { time : {$gt : (new Date ())/1000}}
+                    { time : {$gt : (new Date ()).getTime()/1000}}
                 ]
             }
         ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result) {
@@ -184,7 +184,7 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                     $and: [
                         { 'stopUpdate.stop_id' :  '1921'},
                         { 'trip.route_id' :  '19'},
-                        { time : {$gt : (new Date ())/1000}}
+                        { time : {$gt : (new Date ()).getTime()/1000}}
                     ]
                 }
             ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result2) {
