@@ -189,6 +189,11 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                 }
             ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result2) {
 
+
+                if(result.length == 0 || result2.length ==0)
+                    response.send({});
+
+
                 db.close();
 
                 console.log(request.params.stopIds)
