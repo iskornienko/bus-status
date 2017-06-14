@@ -174,18 +174,20 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
             {
                 $and: [
                     { 'stopUpdate.stop_id' :  '2613'},
-                    { 'trip.route_id' :  '19'}
+                    { 'trip.route_id' :  '19'},
+                    { time : {$gt : (new Date ())/1000}}
                 ]
             }
-        ).sort({time:-1}).limit(1).toArray(function(err,result) {
+        ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result) {
             db.collection('bus_updates').find(
                 {
                     $and: [
                         { 'stopUpdate.stop_id' :  '1921'},
-                        { 'trip.route_id' :  '19'}
+                        { 'trip.route_id' :  '19'},
+                        { time : {$gt : (new Date ())/1000}}
                     ]
                 }
-            ).sort({time:-1}).limit(1).toArray(function(err,result2) {
+            ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result2) {
 
                 db.close();
 
