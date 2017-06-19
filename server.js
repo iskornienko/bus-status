@@ -190,8 +190,8 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
             ).sort({timeToBusArrival:1}).limit(1).toArray(function(err,result2) {
 
 
-                if(result.length == 0 || result2.length ==0)
-                    response.send({});
+            //    if(result.length == 0 || result2.length ==0)
+            //        response.send({});
 
 
                 db.close();
@@ -211,7 +211,7 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
 
                 console.log(requestedStops)
 
-                response.send({data: data.map(function (a) {
+                var dataR = data.map(function (a) {
 
                     if(a == undefined) {
                         return {
@@ -229,7 +229,11 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                         };
                     }
 
-                })});
+                });
+
+                console.log('updated Dates', dataR)
+
+                response.send({data: dataR});
             })
         })
 
