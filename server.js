@@ -212,15 +212,23 @@ app.get('/stop/:stopIds/bus/:busIds', (request, response) => {
                 console.log(requestedStops)
 
                 response.send({data: data.map(function (a) {
-                    return {
-                        trip_id: a.trip ? a.trip.trip_id : undefined,
-                        stop: a.stopUpdate ? a.stopUpdate.stop_id : undefined,
-                        bus: a.trip ? a.trip.route_id : undefined,
-                        time: a.stopUpdate ? a.stopUpdate.arrival.time*1000 : undefined,
-                        timeFromNow: a.stopUpdate ? (a.stopUpdate.arrival.time*1000 - (new Date()).getTime()) : undefined,
-                        routeName: a.routeName,
-                        stopName: a.stopName
-                    };
+
+                    if(a == undefined) {
+                        return {
+
+                        }
+                    } else {
+                        return {
+                            trip_id: a.trip ? a.trip.trip_id : undefined,
+                            stop: a.stopUpdate ? a.stopUpdate.stop_id : undefined,
+                            bus: a.trip ? a.trip.route_id : undefined,
+                            time: a.stopUpdate ? a.stopUpdate.arrival.time*1000 : undefined,
+                            timeFromNow: a.stopUpdate ? (a.stopUpdate.arrival.time*1000 - (new Date()).getTime()) : undefined,
+                            routeName: a.routeName,
+                            stopName: a.stopName
+                        };
+                    }
+
                 })});
             })
         })
