@@ -24,4 +24,4 @@ I no longer take the bus to work thus don't use this anymore.
 
 `webpack --production`
 
-`node ./server.js`
+`node ./server.js` & open browser to http://localhost:5000/
