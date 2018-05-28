@@ -1,5 +1,7 @@
 # Austin, TX Custom Bus Status
 
+*Research/prototype code ... pardon the mess.*
+
 ### Motivation
 I sometimes take a bus to work. Austins bus app is tedious to use and time consuming to check if buses are running on time. This simple bus app helps me understand when to expect the next bus on my route.
 
