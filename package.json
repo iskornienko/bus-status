@@ -6,11 +6,14 @@
     "dev": "webpack-dev-server --config ./webpack.config.js  --port 8089 --http  --inline --history-api-fallback --hot"
   },
   "dependencies": {
+    "angular": "^1.6.4",
     "express": "^4.15.3",
+    "fast-csv": "2.3.0",
     "http-errors": "^1.6.1",
-    "request": "^2.81.0",
     "mongodb": "^2.2.27",
-    "fast-csv": "2.3.0"
+    "nanoleaf-aurora-client": "^1.1.4",
+    "nanoleaves": "^1.2.0",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "babel-core": "^6.20.0",

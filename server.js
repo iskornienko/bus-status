@@ -14,7 +14,7 @@ var server = require('http').createServer(app);
 app.use(express.static('ui'));
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://127.0.0.1:27017/busstatus";
+var url = "mongodb://bus-user:bus-user-pw@ds237700.mlab.com:37700/bus-status";
 
 const BETWEEN_CALLS_IN_MS = 30000;
 
